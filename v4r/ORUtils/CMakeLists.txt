@@ -19,6 +19,7 @@ SET(SOURCE_CPP
   noise_models.cpp
   pcl_visualization_utils.cpp
   segmentation_utils.cpp
+  miscellaneous.cpp
 #  organized_edge_detection.cpp
 )
 
@@ -35,12 +36,13 @@ SET(SOURCE_H
   registration_utils.h
   segmentation_utils.h
   faat_3d_rec_framework_defines.h
+  miscellaneous.h
 #  organized_edge_detection.h
 )
 
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_H} ${SOURCE_CPP})
-target_link_libraries(${PROJECT_NAME} ${OPENCV_LIBRARIES} ${PCL_LIBRARIES} v4rOREdgeDetector ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${OPENCV_LIBRARIES} ${PCL_LIBRARIES} v4rOREdgeDetector v4rKeypointTools ${Boost_LIBRARIES})
 
 v4r_add_library(${PROJECT_NAME} "${SOURCE_H}")
 
