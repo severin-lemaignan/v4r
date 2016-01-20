@@ -14,7 +14,7 @@
 #define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
 #endif
 
-#include "v4r/object_modelling/do_learning.h"
+#include <v4r/object_modelling/do_learning.h>
 
 #include <stdlib.h>
 #include <thread>
@@ -22,6 +22,7 @@
 
 #include <pcl/common/transforms.h>
 #include <pcl/filters/extract_indices.h>
+#include <pcl/filters/passthrough.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/recognition/cg/geometric_consistency.h>
@@ -119,7 +120,7 @@ DOL::calcSiftFeatures (const pcl::PointCloud<PointT>::Ptr &cloud_src,
     estimator.reset (new SIFTLocalEstimation<PointT, FeatureT>(sift_));
 
     bool ret = estimator->estimate (cloud_src, sift_keypoints, sift_signatures, sift_keypoint_scales);
-    estimator->getKeypointIndices( sift_keypoint_pcl_indices );
+    estimator->getKeypointIndices( sift_keypoint_pcl_indices.indices );
 #else
     (void)sift_keypoint_scales; //silences compiler warning of unused variable
     boost::shared_ptr < OpenCVSIFTLocalEstimation<PointT, pcl::Histogram<128> > > estimator;
@@ -984,7 +985,7 @@ DOL::initSIFT ()
         char * argvv[] = {kw[0], kw[1], kw[2], kw[3],kw[4],kw[5],kw[6], NULL};
 
         int argcc = sizeof(argvv) / sizeof(char*);
-        sift_ = new SiftGPU ();
+        sift_.reset( new SiftGPU () );
         sift_->ParseParam (argcc, argvv);
 
         //create an OpenGL context for computation
